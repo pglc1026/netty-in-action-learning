@@ -9,12 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Chapter 2. Echo Client</name>
-
     <artifactId>echo-client</artifactId>
 
+    <name>Chapter 2. Echo Client</name>
+
     <build>
-        <finalName>echo-server</finalName>
+        <finalName>echo-client</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

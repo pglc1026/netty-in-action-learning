@@ -33,6 +33,11 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.err.println("Client断开");
+    }
+
+    @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         // 打印异常的堆栈信息
         cause.printStackTrace();

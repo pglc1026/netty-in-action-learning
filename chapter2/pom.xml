@@ -14,9 +14,9 @@
         <module>Client</module>
     </modules>
 
-    <artifactId>chapter2</artifactId>
-
     <name>Chapter 2. Your First Netty Application</name>
+
+    <artifactId>chapter2</artifactId>
 
     <properties>
         <echo-server.hostname>localhost</echo-server.hostname>
@@ -24,6 +24,7 @@
     </properties>
 
     <build>
+        <finalName>chapter2</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
