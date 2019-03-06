@@ -9,6 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>chapter2</module>
+        <module>chapter2-review</module>
     </modules>
 
     <packaging>pom</packaging>
