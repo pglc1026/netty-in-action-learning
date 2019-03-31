@@ -10,18 +10,18 @@ import java.io.File;
 import java.io.FileInputStream;
 
 /**
- * ChunkedWriterHandlerInitializer
+ * ChunkedWriteHandlerInitializer
  *
  * @author pglc1026
  * @date 2019-03-31
  */
-public class ChunkedWriterHandlerInitializer extends ChannelInitializer<Channel> {
+public class ChunkedWriteHandlerInitializer extends ChannelInitializer<Channel> {
 
     private final File file;
 
     private final SslContext sslCtx;
 
-    public ChunkedWriterHandlerInitializer(File file, SslContext sslCtx) {
+    public ChunkedWriteHandlerInitializer(File file, SslContext sslCtx) {
         this.file = file;
         this.sslCtx = sslCtx;
     }
