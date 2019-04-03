@@ -11,19 +11,19 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
- * HttpRequestHandler
+ * MyHttpRequestHandler2
  *
  * @author pglc1026
- * @date 2019-03-31
+ * @date 2019-04-02
  */
-public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
+public class MyHttpRequestHandler2 extends SimpleChannelInboundHandler<FullHttpRequest> {
 
     private final String wsUri;
 
     private static final File INDEX;
 
     static {
-        URL location = HttpRequestHandler.class
+        URL location = MyHttpRequestHandler2.class
                 .getProtectionDomain()
                 .getCodeSource()
                 .getLocation();
@@ -34,36 +34,39 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             INDEX = new File(path);
         } catch (URISyntaxException e) {
             throw new IllegalStateException(
-                    "Unable to locate index.html", e);
+                    "Unable to locate index.html");
         }
+
     }
 
-    public HttpRequestHandler(String wsUri) {
+    public MyHttpRequestHandler2(String wsUri) {
         this.wsUri = wsUri;
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest request) throws Exception {
-        // 如果升级了websocket，则增加它的引用计数，并传递给下一个ChannelInboundHandler
-        if (wsUri.equalsIgnoreCase(request.uri())) {
+        // 如果升级了WebSocket，则将request引用计数+1并传递给下一个ChannelHandler
+        if (request.uri().equalsIgnoreCase(wsUri)) {
             ctx.fireChannelRead(request.retain());
         } else {
-            // 处理100Continue请求以符合HTTP 1.1规范
+            // 处理100continue请求以符合HTTP1.1规范
             if (HttpUtil.is100ContinueExpected(request)) {
-                send100Continue(ctx);
+                send100ContinueReponse(ctx);
             }
 
+            // 读取文件
             RandomAccessFile file = new RandomAccessFile(INDEX, "r");
-            HttpResponse response = new DefaultHttpResponse(
-                    request.protocolVersion(), HttpResponseStatus.OK);
-            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain;charset=UTF-8");
-            // 如果请求了keep-alive，则设置需要的头信息
+            HttpResponse response = new DefaultHttpResponse(request.protocolVersion(), HttpResponseStatus.OK);
+            response.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.TEXT_PLAIN);
+
+            // 是否请求了keep-alive
             boolean keepAlive = HttpUtil.isKeepAlive(request);
             if (keepAlive) {
                 response.headers().set(HttpHeaderNames.CONTENT_LENGTH, file.length());
                 response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
             }
             ctx.write(response);
+
             if (ctx.pipeline().get(SslHandler.class) == null) {
                 ctx.write(new DefaultFileRegion(file.getChannel(), 0, file.length()));
             } else {
@@ -74,18 +77,11 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
             if (!keepAlive) {
                 future.addListener(ChannelFutureListener.CLOSE);
             }
-
         }
     }
 
-    private static void send100Continue(ChannelHandlerContext ctx) {
-        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE);
+    private void send100ContinueReponse(ChannelHandlerContext ctx) {
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
         ctx.writeAndFlush(response);
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        ctx.close();
     }
 }
