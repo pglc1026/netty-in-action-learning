@@ -15,7 +15,7 @@ import io.netty.channel.socket.oio.OioServerSocketChannel;
 public class UDPServer {
 
     public static void main(String[] args) throws Exception {
-        new UDPServer.start();
+        new UDPServer().start();
     }
 
     public void start() throws Exception {
