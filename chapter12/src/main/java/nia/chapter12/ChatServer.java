@@ -1,10 +1,7 @@
 package nia.chapter12;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -28,7 +25,7 @@ public class ChatServer {
 
     private Channel channel;
 
-    private ChannelFuture start(InetSocketAddress address) {
+    protected ChannelFuture start(InetSocketAddress address) {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(group)
                 .channel(NioServerSocketChannel.class)
@@ -40,12 +37,12 @@ public class ChatServer {
         return future;
     }
 
-    private ChannelHandler createInitializer(ChannelGroup channelGroup) {
+    protected ChannelInitializer<Channel> createInitializer(ChannelGroup channelGroup) {
         return new ChatServerInitializer(channelGroup);
     }
 
     // 处理服务器关闭并释放资源
-    private void destroy() {
+    protected void destroy() {
         if (channel != null) {
             channel.close();
         }
@@ -53,13 +50,13 @@ public class ChatServer {
         group.shutdownGracefully();
     }
 
-    public static void main(String[] args) {
-//        if (args.length != 1) {
-//            System.err.println("Please give port as argument!");
-//            System.exit(1);
-//        }
+    public static void main(String[] args) throws Exception {
+        if (args.length != 1) {
+            System.err.println("Please give port as argument!");
+            System.exit(1);
+        }
 
-        int port = Integer.parseInt("8888");
+        int port = Integer.parseInt(args[0]);
         ChatServer endpoint = new ChatServer();
         ChannelFuture future = endpoint.start(new InetSocketAddress(port));
         Runtime.getRuntime().addShutdownHook(new Thread() {

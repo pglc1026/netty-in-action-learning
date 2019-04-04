@@ -47,31 +47,31 @@
                 </plugins>
             </build>
         </profile>
-<!--        <profile>-->
-<!--            <id>SecureChatServer</id>-->
-<!--            <properties>-->
-<!--                <mainClass>nia.chapter12.SecureChatServer</mainClass>-->
-<!--                <port>8888</port>-->
-<!--            </properties>-->
-<!--            <build>-->
-<!--                <plugins>-->
-<!--                    <plugin>-->
-<!--                        <groupId>org.codehaus.mojo</groupId>-->
-<!--                        <artifactId>exec-maven-plugin</artifactId>-->
-<!--                        <version>1.2.1</version>-->
-<!--                        <configuration>-->
-<!--                            <executable>java</executable>-->
-<!--                            <arguments>-->
-<!--                                <argument>-classpath</argument>-->
-<!--                                <classpath/>-->
-<!--                                <argument>${mainClass}</argument>-->
-<!--                                <argument>${port}</argument>-->
-<!--                            </arguments>-->
-<!--                        </configuration>-->
-<!--                    </plugin>-->
-<!--                </plugins>-->
-<!--            </build>-->
-<!--        </profile>-->
+        <profile>
+            <id>SecureChatServer</id>
+            <properties>
+                <mainClass>nia.chapter12.SecureChatServer</mainClass>
+                <port>9999</port>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.2.1</version>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-classpath</argument>
+                                <classpath/>
+                                <argument>${mainClass}</argument>
+                                <argument>${port}</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 </project>
